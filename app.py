@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session, request, redirect, url_for, flash, abort
 from dotenv import load_dotenv
 from flask_mysqldb import MySQL
 import os
@@ -22,6 +22,10 @@ def login():
 @app.route("/register")
 def register():
     return render_template("register.html")
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 if __name__ == "__main__":
