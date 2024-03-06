@@ -9,7 +9,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center">
@@ -18,22 +18,33 @@
             <div class="card" id="card-style">
                 
                 <div class="card-body p-4 shadow-lg">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-danger" role="alert">
+                                    <div>
+                                        {{ message }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
                     <form action="#" method="POST">
                         <div class="mb-3">
-                            <label for="registerUserNameInput" class="form-label">Email address</label>
-                            <input type="text" class="form-control" id="registerUserNameInput" required>
+                            <label for="registerUserNameInput" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="registerUserNameInput" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="registerEmailInput" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="registerEmailInput" required>
+                            <input type="email" class="form-control" id="registerEmailInput" name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="registerPassInput" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="registerPassInput" required>
+                            <input type="password" class="form-control" id="registerPassInput" name="pass" required>
                         </div>
                         <div class="mb-3">
                             <label for="registerPassReptInput" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="registerPassReptInput" required>
+                            <input type="password" class="form-control" id="registerPassReptInput" name="passrept" required>
                         </div>
                         <button type="submit" class="btn btn-dark mb-2">Submit</button>
                     </form>
