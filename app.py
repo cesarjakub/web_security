@@ -47,6 +47,8 @@ def register():
         return render_template("register.html")
 
 
+
+
 def hash_password(password):
     salt = "salted password"
     password_with_salt = password + salt
