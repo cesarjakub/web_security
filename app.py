@@ -49,7 +49,15 @@ def register():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if "user" in session:
+        return render_template("index.html")
+    return redirect(url_for("login"))
+
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("login"))
 
 
 def hash_password(password):
