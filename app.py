@@ -47,6 +47,9 @@ def register():
         return render_template("register.html")
 
 
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 
 def hash_password(password):
