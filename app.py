@@ -24,6 +24,9 @@ def login():
         email = request.form["email"]
         password = request.form["pass"]
         
+        hash_pass = hash_password(password)
+        print(hash_pass)
+
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
