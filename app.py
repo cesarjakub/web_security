@@ -18,8 +18,24 @@ app.config['MYSQL_USER'] = os.getenv('DB_USER')
 
 
 
-@app.route("/login")
+@app.route("/login", methods=["POST", "GET"])
 def login():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["pass"]
+        
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone()
+        cursor.close()
+
+        if user and check_password(password, user[3]) and check_email(email, user[2]):
+            session["user"] = user
+            return redirect(url_for("index"))
+        
+        flash("Password or email is incorrect", "warning")
+        return render_template("login.html")
+    
     return render_template("login.html")
 
 
@@ -43,8 +59,8 @@ def register():
         else:
             flash('Passwords do not match. Please try again.', 'warning')
             return render_template("register.html")
-    else:
-        return render_template("register.html")
+
+    return render_template("register.html")
 
 
 @app.route("/")
@@ -65,6 +81,13 @@ def hash_password(password):
     password_with_salt = password + salt
     hashed_password = hashlib.sha256(password_with_salt.encode()).hexdigest()
     return hashed_password
+
+def check_password(user_pass, db_pass):
+    hash_user_pass = hash_password(user_pass)
+    return hash_user_pass == db_pass
+
+def check_email(user_email, db_email):
+    return user_email == db_email
 
 
 @app.errorhandler(404)
