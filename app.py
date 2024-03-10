@@ -63,10 +63,29 @@ def register():
     return render_template("register.html")
 
 
-@app.route("/")
+@app.route("/", methods=["POST", "GET"])
 def index():
     if "user" in session:
-        return render_template("index.html")
+        user = session["user"]
+        if request.method == "POST":
+            msg = request.form["message"]
+            checkbox_val = request.form.get('display')
+            if checkbox_val:
+                is_visible = 1
+            else:
+                is_visible = 0
+
+            cursor = mysql.connection.cursor()
+            cursor.execute("INSERT INTO orders (user_ID, MessageText, is_active) VALUES(%s, %s, %s)", (user[0], msg, is_visible))
+            mysql.connection.commit()
+            cursor.close()
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT users.name, users.email, orders.MessageText from orders inner join users on orders.user_ID = users.id WHERE is_active = 1")
+        messages = cursor.fetchall()
+        cursor.close()
+
+        return render_template("index.html", messages=messages)
     return redirect(url_for("login"))
 
 @app.route("/profile", methods=["POST", "GET"])
@@ -97,7 +116,6 @@ def profile():
         cursor.execute("SELECT name, email FROM users")
         users = cursor.fetchall()
         cursor.close()
-        print(users[0][0])
 
         return render_template("profile.html", users=users)
     return redirect(url_for("login"))
