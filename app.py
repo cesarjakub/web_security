@@ -118,7 +118,7 @@ def profile():
         cursor.close()
 
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT users.name, users.email, orders.MessageText from orders inner join users on orders.user_ID = users.id WHERE orders.user_ID = %s", (user[0], ))
+        cursor.execute("SELECT users.name, users.email, orders.MessageText, orders.id from orders inner join users on orders.user_ID = users.id WHERE orders.user_ID = %s", (user[0], ))
         messages = cursor.fetchall()
         cursor.close()
 
@@ -131,6 +131,22 @@ def logout():
     if "user" in session:
         session.pop("user", None)
     return redirect(url_for("login"))
+
+
+@app.route("/delete_message", methods=["POST"])
+def delete_message():
+    if request.method == "POST":
+        message_id = request.form["message_id"]
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("DELETE FROM orders WHERE id = %s", (message_id,))
+        mysql.connection.commit()
+        cursor.close()
+        flash("Message deleted.", "success")
+        return redirect(url_for("profile"))
+    else:
+        flash("Invalid request.", "danger")
+        return redirect(url_for("profile"))
 
 
 def hash_password(password):

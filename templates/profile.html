@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Index{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -52,6 +52,10 @@
                     <p>{{msg[1]}}</p>
                     <footer class="blockquote-footer">{{msg[2]}}</footer>
                 </blockquote>
+                <form action="/delete_message" method="POST">
+                    <input type="hidden" name="message_id" value="{{ msg[3] }}">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
                 </div>
             </div>
         {% endfor %}
