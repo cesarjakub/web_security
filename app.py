@@ -23,9 +23,6 @@ def login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["pass"]
-        
-        hash_pass = hash_password(password)
-        print(hash_pass)
 
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
@@ -72,10 +69,26 @@ def index():
         return render_template("index.html")
     return redirect(url_for("login"))
 
+@app.route("/profile", methods=["POST", "GET"])
+def profile():
+    if "user" in session:
+        if request.method == "POST":
+            user_name = request.form["name"]
+            email = request.form["email"]
+            password = request.form["pass"]
+            password_rept = request.form["passrept"]
+            icon_link = request.form["icon"]
+
+            
+
+        return render_template("profile.html")
+    return redirect(url_for("login"))
+
 
 @app.route("/logout")
 def logout():
-    session.pop("user", None)
+    if "user" in session:
+        session.pop("user", None)
     return redirect(url_for("login"))
 
 

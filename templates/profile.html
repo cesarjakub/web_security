@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Update your profile</h1>
+    <form action="#" method="POST">
+        <div class="mb-3">
+            <label for="updateUserNameInput" class="form-label">Name</label>
+            <input type="text" class="form-control" id="updateUserNameInput" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="updateEmailInput" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="updateEmailInput" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="updatePassInput" class="form-label">Password</label>
+            <input type="password" class="form-control" id="updatePassInput" name="pass" required>
+        </div>
+        <div class="mb-3">
+            <label for="updatePassReptInput" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="updatePassReptInput" name="passrept" required>
+        </div>
+        <div class="mb-3">
+            <label for="updateUserIconInput" class="form-label">Icon link</label>
+            <input type="text" class="form-control" id="updateUserIconInput" name="icon" required>
+        </div>
+        <button type="submit" class="btn btn-dark mb-2">Update</button>
+    </form>
+    <hr>
+    <div>
+        <h1>List of users</h1>
+        <div class="card mb-2">
+            <div class="card-header">
+              USER
+            </div>
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>EMAIL</p>
+              </blockquote>
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock %}
