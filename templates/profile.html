@@ -39,10 +39,27 @@
         <button type="submit" class="btn btn-dark mb-2">Update</button>
     </form>
     <hr>
-    <div>
+    <div class="d-flex flex-row flex-.wrap">
+        <div class="flex-fill me-1">
+        <h1>My orders</h1>
+        {% for msg in messages %}
+            <div class="card mb-2">
+                <div class="card-header">
+                    {{msg[0]}}
+                </div>
+                <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>{{msg[1]}}</p>
+                    <footer class="blockquote-footer">{{msg[2]}}</footer>
+                </blockquote>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="flex-fill">
         <h1>List of users</h1>
         {% for user in users %}
-            <div class="card mb-2">
+            <div class="card mb-2 ms-1">
                 <div class="card-header">
                     {{user[0]}}
                 </div>
@@ -52,7 +69,8 @@
                 </blockquote>
                 </div>
             </div>
-          {% endfor %}
+        {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

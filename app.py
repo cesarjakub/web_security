@@ -117,7 +117,12 @@ def profile():
         users = cursor.fetchall()
         cursor.close()
 
-        return render_template("profile.html", users=users)
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT users.name, users.email, orders.MessageText from orders inner join users on orders.user_ID = users.id WHERE orders.user_ID = %s", (user[0], ))
+        messages = cursor.fetchall()
+        cursor.close()
+
+        return render_template("profile.html", users=users, messages=messages)
     return redirect(url_for("login"))
 
 
