@@ -1,0 +1,4 @@
+flask
+dotenv
+flask_mysqldb
+hashlib
