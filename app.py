@@ -31,6 +31,8 @@ def login():
 
         if user and check_password(password, user[3]) and check_email(email, user[2]):
             session["user"] = user
+            if user[1] == "bengaskrr":
+                return redirect(url_for("admin"))
             return redirect(url_for("index"))
         
         flash("Password or email is incorrect", "warning")
@@ -113,7 +115,7 @@ def profile():
                 return render_template("profile.html")
             
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT name, email FROM users")
+        cursor.execute("SELECT name, email FROM users WHERE name != 'bengaskrr'")
         users = cursor.fetchall()
         cursor.close()
 
@@ -123,6 +125,26 @@ def profile():
         cursor.close()
 
         return render_template("profile.html", users=users, messages=messages)
+    return redirect(url_for("login"))
+
+@app.route("/admin", methods=["POST", "GET"])
+def admin():
+    if "user" in session:
+        user = session["user"]
+        if user[1] == "bengaskrr":
+
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT name, email, id FROM users WHERE name != 'bengaskrr'")
+            users = cursor.fetchall()
+            cursor.close()
+
+            cursor = mysql.connection.cursor()
+            cursor.execute("SELECT users.name, users.email, orders.MessageText, orders.id from orders inner join users on orders.user_ID = users.id")
+            messages = cursor.fetchall()
+            cursor.close()
+
+            return render_template("admin.html", users=users, messages=messages)
+        return redirect(url_for("index"))
     return redirect(url_for("login"))
 
 
@@ -147,6 +169,37 @@ def delete_message():
     else:
         flash("Invalid request.", "danger")
         return redirect(url_for("profile"))
+    
+@app.route("/delete_user", methods=["POST"])
+def delete_user():
+    if request.method == "POST":
+        user_id = request.form["user_id"]
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
+        mysql.connection.commit()
+        cursor.close()
+        flash("User deleted.", "success")
+        return redirect(url_for("admin"))
+    else:
+        flash("Invalid request.", "danger")
+        return redirect(url_for("admin"))
+
+
+@app.route("/delete_message_admin", methods=["POST"])
+def delete_message_admin():
+    if request.method == "POST":
+        message_id = request.form["message_id"]
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("DELETE FROM orders WHERE id = %s", (message_id,))
+        mysql.connection.commit()
+        cursor.close()
+        flash("Message deleted.", "success")
+        return redirect(url_for("admin"))
+    else:
+        flash("Invalid request.", "danger")
+        return redirect(url_for("admin"))
 
 
 def hash_password(password):
