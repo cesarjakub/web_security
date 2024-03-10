@@ -28,7 +28,7 @@
     <main>
         <div class="container">
         <h1>Update your password</h1>
-        <form action="#" method="POST">
+        <form action="/profile_admin" method="POST">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}

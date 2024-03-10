@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container">
     <h1>Update your profile</h1>
-    <form action="#" method="POST">
+    <form action="/profile" method="POST">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
