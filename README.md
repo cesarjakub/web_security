@@ -24,3 +24,6 @@ TOKEN = `zde můžeme napsat co chcema`
     - **os**
     - **hashlib**
 
+## Server
+- je zde možnost připojit se na server na kterém webovka běží
+- [http://16.16.68.180:5000/](http://16.16.68.180:5000/)
