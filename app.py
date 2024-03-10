@@ -72,6 +72,7 @@ def index():
 @app.route("/profile", methods=["POST", "GET"])
 def profile():
     if "user" in session:
+        user = session["user"]
         if request.method == "POST":
             user_name = request.form["name"]
             email = request.form["email"]
@@ -79,9 +80,26 @@ def profile():
             password_rept = request.form["passrept"]
             icon_link = request.form["icon"]
 
-            
+            password_hash = hash_password(password)
+            password_rept_hash = hash_password(password_rept)
 
-        return render_template("profile.html")
+            if password_hash == password_rept_hash:
+                cursor = mysql.connection.cursor()
+                cursor.execute("UPDATE users SET name = %s, email = %s, password = %s, icon = %s WHERE id = %s", (user_name, email, password_hash, icon_link, user[0]))
+                mysql.connection.commit()
+                cursor.close()
+                flash('Profile updated.', 'success')
+            else:
+                flash('Passwords do not match. Please try again.', 'danger')
+                return render_template("profile.html")
+            
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT name, email FROM users")
+        users = cursor.fetchall()
+        cursor.close()
+        print(users[0][0])
+
+        return render_template("profile.html", users=users)
     return redirect(url_for("login"))
 
 
