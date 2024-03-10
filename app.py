@@ -147,6 +147,32 @@ def admin():
         return redirect(url_for("index"))
     return redirect(url_for("login"))
 
+@app.route("/profile_admin", methods=["POST", "GET"])
+def profile_admin():
+    if "user" in session:
+        user = session["user"]
+        if user[1] == "bengaskrr":
+            if request.method == "POST":
+                password = request.form["pass"]
+                password_rept = request.form["passrept"]
+
+                password_hash = hash_password(password)
+                password_rept_hash = hash_password(password_rept)
+
+                if password_hash == password_rept_hash:
+                    cursor = mysql.connection.cursor()
+                    cursor.execute("UPDATE users SET password = %s WHERE id = %s", (password_hash, user[0]))
+                    mysql.connection.commit()
+                    cursor.close()
+                    flash('Profile updated.', 'success')
+                else:
+                    flash('Passwords do not match. Please try again.', 'danger')
+                    return render_template("profile_admin.html")
+        
+            return render_template("profile_admin.html")
+        return redirect(url_for("index"))
+    return redirect(url_for("login"))
+
 
 @app.route("/logout")
 def logout():

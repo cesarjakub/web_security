@@ -7,7 +7,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Admin profile</title>
 </head>
 <body>
     <div class="container">
@@ -27,6 +27,8 @@
 
     <main>
         <div class="container">
+        <h1>Update your password</h1>
+        <form action="#" method="POST">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
@@ -38,48 +40,17 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            <div class="d-flex flex-row flex-.wrap">
-                <div class="flex-fill me-1">
-                <h1>List of orders</h1>
-                {% for msg in messages %}
-                    <div class="card mb-2">
-                        <div class="card-header">
-                            {{msg[0]}}
-                        </div>
-                        <div class="card-body">
-                        <blockquote class="blockquote mb-0">
-                            <p>{{msg[1]}}</p>
-                            <footer class="blockquote-footer">{{msg[2]}}</footer>
-                        </blockquote>
-                        <form action="/delete_message_admin" method="POST">
-                            <input type="hidden" name="message_id" value="{{ msg[3] }}">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
-                <div class="flex-fill">
-                <h1>List of users</h1>
-                {% for user in users %}
-                    <div class="card mb-2 ms-1">
-                        <div class="card-header">
-                            {{user[0]}}
-                        </div>
-                        <div class="card-body">
-                        <blockquote class="blockquote mb-0">
-                            <p>{{user[1]}}</p>
-                        </blockquote>
-                        <form action="/delete_user" method="POST">
-                            <input type="hidden" name="user_id" value="{{ user[2] }}">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
+            <div class="mb-3">
+                <label for="updatePassInput" class="form-label">Password</label>
+                <input type="password" class="form-control" id="updatePassInput" name="pass" required>
             </div>
-        </div>
+            <div class="mb-3">
+                <label for="updatePassReptInput" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="updatePassReptInput" name="passrept" required>
+            </div>
+            <button type="submit" class="btn btn-dark mb-2">Update</button>
+        </form>
+    </div>
     </main>
 
     <div class="container">
